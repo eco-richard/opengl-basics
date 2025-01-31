@@ -2,3 +2,5 @@ build
 .cache
 vcpkg_installed
 vcpkg-manifest-install.log
+*/.DS_Store
+.DS_Store
