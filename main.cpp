@@ -1,3 +1,4 @@
+#define STB_IMAGE_IMPLEMENTAION
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -15,6 +16,7 @@
 #include "Camera.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "Window.hpp"
 
 std::vector<Mesh> create_objects();
@@ -30,6 +32,11 @@ int main() {
 
   Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
                 -90.0f, 0.0f, 5.0f, 0.5f);
+
+  auto brick_texture{Texture("../textures/brick.png")};
+  brick_texture.LoadTexture();
+  auto dirt_texture{Texture("../textures/dirt.png")};
+  dirt_texture.LoadTexture();
 
   uint32_t uniform_model, uniform_projection, uniform_view;
   glm::mat4 projection = glm::perspective(
@@ -66,6 +73,7 @@ int main() {
                        glm::value_ptr(projection));
     glUniformMatrix4fv(uniform_view, 1, GL_FALSE,
                        glm::value_ptr(camera.CalculateViewMatrix()));
+    brick_texture.UseTexture();
     mesh_list[0].RenderMesh();
 
     model = glm::identity<glm::mat4>();
@@ -74,6 +82,7 @@ int main() {
     glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(uniform_projection, 1, GL_FALSE,
                        glm::value_ptr(projection));
+    dirt_texture.UseTexture();
     mesh_list[1].RenderMesh();
 
     glUseProgram(0);
@@ -85,8 +94,9 @@ int main() {
 std::vector<Mesh> create_objects() {
   std::vector<uint32_t> indicies = {0, 3, 1, 1, 3, 2, 2, 3, 0, 0, 1, 2};
 
-  std::vector<float> verticies = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f,
-                                  1.0f,  -1.0f, 0.0f, 0.0f, 1.0f,  0.0f};
+  std::vector<float> verticies = {-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
+                                  1.0f,  0.5f,  0.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+                                  0.0f,  0.0f,  1.0f, 0.0f, 0.5f,  1.0f};
 
   auto mesh_list = std::vector<Mesh>{};
 
