@@ -8,10 +8,13 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
-include_directories(${PROJECT_SOURCE_DIR} .)
-add_executable(main main.cpp Window.cpp Shader.cpp Mesh.cpp Camera.cpp Texture.cpp)
+include_directories(include)
 
-target_link_libraries(main
+file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_link_libraries(${PROJECT_NAME}
   PRIVATE
   GLEW::GLEW
   glfw
