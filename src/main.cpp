@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "Camera.hpp"
+#include "Light.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -33,12 +34,16 @@ int main() {
   Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
                 -90.0f, 0.0f, 5.0f, 0.5f);
 
+  Light ambient_light = Light(0.5f, 0.5f, 0.0f, 0.5f);
+
   auto brick_texture{Texture("../textures/brick.png")};
   brick_texture.LoadTexture();
   auto dirt_texture{Texture("../textures/dirt.png")};
   dirt_texture.LoadTexture();
 
-  uint32_t uniform_model, uniform_projection, uniform_view;
+  uint32_t uniform_model, uniform_projection, uniform_view,
+      uniform_ambient_intensity, uniform_ambient_color;
+
   glm::mat4 projection = glm::perspective(
       45.0f,
       GLfloat(window.GetBufferWidth()) / GLfloat(window.GetBufferHeight()),
@@ -62,6 +67,10 @@ int main() {
     uniform_model = shader_list[0].GetModelLocation();
     uniform_projection = shader_list[0].GetProjectionLocation();
     uniform_view = shader_list[0].GetViewLocation();
+    uniform_ambient_color = shader_list[0].GetAmbientColor();
+    uniform_ambient_intensity = shader_list[0].GetAmbientIntensity();
+
+    ambient_light.UseLight(uniform_ambient_intensity, uniform_ambient_color);
 
     glm::mat4 model = glm::identity<glm::mat4>();
 

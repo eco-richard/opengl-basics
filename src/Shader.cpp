@@ -99,4 +99,8 @@ void Shader::compile_shader(const char* vertex_shader,
   uniform_model_ = glGetUniformLocation(program_, "model");
   uniform_projection_ = glGetUniformLocation(program_, "projection");
   uniform_view_ = glGetUniformLocation(program_, "view");
+  uniform_ambient_color_ =
+      glGetUniformLocation(program_, "directional_light.color");
+  uniform_ambient_intensity_ =
+      glGetUniformLocation(program_, "directional_light.ambientIntensity");
 }
